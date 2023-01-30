@@ -4,7 +4,7 @@ from tkinter.filedialog import asksaveasfile
 from tkinter import messagebox
 
 customtkinter.set_appearance_mode('Dark')
-customtkinter.set_default_color_theme('blue')
+customtkinter.set_default_color_theme('dark-blue')
 
 class App(customtkinter.CTk):
     def __init__(self):
