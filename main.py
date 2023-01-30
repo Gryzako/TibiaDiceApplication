@@ -12,12 +12,11 @@ class App(customtkinter.CTk):
 
         #Main Variable
         self.CUSTOMERACCOUNT = 0
-        paddingSmall = ['pady=5', 'padx=5']
 
         #Configure window
-        self.geometry('515x430')
-        self.resizable()
-        self.title('Tibia Dice App')
+        self.geometry('530x490')
+        self.resizable(False, False)
+        self.title('Tibia Dice Application ver 1.0')
 
         #Configure frames
         self.frame_1 = customtkinter.CTkFrame(self)
@@ -39,13 +38,19 @@ class App(customtkinter.CTk):
         self.slider.set(80)
         self.slider.grid(column=1, row=1)
         self.actualprovisionLabel = customtkinter.CTkLabel(master=self.frame_1, text="80.0 %")
-        self.actualprovisionLabel.grid(column=2, row=1)
+        self.actualprovisionLabel.grid(column=2, row=1,pady=5, padx=5)
         self.customerPayIntoPot = customtkinter.CTkLabel(master=self.frame_1, text="Customer pays into the pot:")
-        self.customerPayIntoPot.grid(column=0, row=2)
+        self.customerPayIntoPot.grid(column=0, row=2,pady=5, padx=5)
         self.customerPayIntoPotEntry = customtkinter.CTkEntry(master=self.frame_1, placeholder_text="amount")
-        self.customerPayIntoPotEntry.grid(column=1, row=2)
+        self.customerPayIntoPotEntry.grid(column=1, row=2,pady=5, padx=5)
         self.customerPayIntoPotButton = customtkinter.CTkButton(master=self.frame_1, text="Add", command=self.addButtonAction)
-        self.customerPayIntoPotButton.grid(column=2, row=2)
+        self.customerPayIntoPotButton.grid(column=2, row=2,pady=5, padx=5)
+        self.customerWithdraw = customtkinter.CTkLabel(master=self.frame_1, text="Customer Withdraw")
+        self.customerWithdraw.grid(column=0,row=3,pady=5, padx=5)
+        self.customerWithdrawEntry = customtkinter.CTkEntry(master=self.frame_1, placeholder_text="amount")
+        self.customerWithdrawEntry.grid(column=1,row=3,pady=5, padx=5)
+        self.customerWithdrawButton = customtkinter.CTkButton(master=self.frame_1, text='Withdraw', command=self.withdrawAmmount)
+        self.customerWithdrawButton.grid(column=2,row=3,pady=5, padx=5)
         self.betLabel = customtkinter.CTkLabel(master=self.frame_2, text="Bet")
         self.betLabel.grid(column=0, row=1,pady=5, padx=5)
         self.betEntry = customtkinter.CTkEntry(master=self.frame_2, placeholder_text="amount")
@@ -55,7 +60,7 @@ class App(customtkinter.CTk):
         self.loseButton = customtkinter.CTkButton(master=self.frame_2, text="Lose", command=self.loseAction)
         self.loseButton.grid(column=1, row=2,pady=5, padx=5)
 
-        self.textBox = customtkinter.CTkTextbox(self, width=480, height=150)
+        self.textBox = customtkinter.CTkTextbox(self, state='disabled', width=500, height=150)
         self.textBox.grid(column=0, row=5)
 
         self.newPlayerButton = customtkinter.CTkButton(master=self.frame_3, text='Restart', command=self.restartButton)
@@ -70,14 +75,22 @@ class App(customtkinter.CTk):
 
     def addButtonAction(self):
         self.CUSTOMERACCOUNT += int(self.customerPayIntoPotEntry.get())
-        self.logging(f"Customer added {self.customerPayIntoPotEntry.get()} into the pot")
+        self.logging(f"Customer added {self.customerPayIntoPotEntry.get()} into the pot. Current balance is {self.CUSTOMERACCOUNT}")
         self.customerPayIntoPotEntry.delete(0, 'end')
-        self.customerValue.configure(text=str(self.CUSTOMERACCOUNT))   
+        self.customerValue.configure(text=str(self.CUSTOMERACCOUNT))  
+
+    def withdrawAmmount(self):
+        self.CUSTOMERACCOUNT -= int(self.customerWithdrawEntry.get()) 
+        self.logging(f'Customer withdraw {self.customerWithdrawEntry.get()} current balance is {self.CUSTOMERACCOUNT}')
+        self.customerWithdrawEntry.delete(0,'end')
+        self.customerValue.configure(text=str(self.CUSTOMERACCOUNT))
 
     def logging(self, message):
         self.now = datetime.now()
         self.dt_string = self.now.strftime("%d/%m/%Y %H:%M:%S")
+        self.textBox.configure(state='normal')
         self.textBox.insert('0.0', f"{self.dt_string} - {message}\n")
+        self.textBox.configure(state='disabled')
     
     def winAction(self):
         value = int(self.betEntry.get())
@@ -103,11 +116,13 @@ class App(customtkinter.CTk):
         file.close()
 
     def restartButton(self):
-        response = messagebox.askyesno("Restart?", "Do you realy want to restart?")
+        response = messagebox.askyesno("Restart", "Do you really want to restart?")
         if response:
             self.CUSTOMERACCOUNT = 0
             self.customerValue.configure(text=str(self.CUSTOMERACCOUNT))
+            self.textBox.configure(state='normal')
             self.textBox.delete(1.0, "end-1c")
+            self.textBox.configure(state='disabled')
         else:
             pass
         
