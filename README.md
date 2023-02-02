@@ -1,4 +1,4 @@
-"# TibiaBot" 
+"# Tibia Dice App" 
 
 Version 1.0
 Application which do a math instead of dicer in Tibia. Additionally there is a small log which record all acrivities.
@@ -12,6 +12,10 @@ Current version include:
 
 List thinkgs to do:
 - Revert text in text area 
-- button PL/ENG
 - graph which is showing earning of dicer
 - Name of player to make log more detailed
+
+Log:
+Version 1.1:
+- Language change added. Currently we've got Polish and English language
+- Them colour change option. We've got Light and Dark colour
